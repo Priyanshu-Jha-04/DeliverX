@@ -280,61 +280,6 @@ fun LoginScreenPreview() {
 }
 
 
-@Composable
-fun EmailInput(
-    modifier: Modifier = Modifier,
-    emailState: MutableState<String>,
-    labelID: String = "Email",
-    enabled: Boolean = true,
-    imeAction: ImeAction = ImeAction.Next,
-    onAction: KeyboardActions = KeyboardActions.Default
-) {
-    InputField(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(Color.White.copy(alpha = 0.2f))
-            .border(
-                1.dp,
-                Color.Gray.copy(alpha = 0.3f),
-                RoundedCornerShape(8.dp)
-            ),
-        valueState = emailState,
-        labelID = labelID,
-        enabled = enabled,
-        keyboardType = KeyboardType.Email,
-        imeAction = imeAction,
-        onAction = onAction
-    )
-
-}
-
-@Composable
-fun InputField(
-    modifier: Modifier = Modifier,
-    valueState: MutableState<String>,
-    labelID: String,
-    enabled: Boolean,
-    isSingleLine: Boolean = true,
-    keyboardType: KeyboardType = KeyboardType.Email,
-    imeAction: ImeAction = ImeAction.Next,
-    onAction: KeyboardActions = KeyboardActions.Default
-) {
-    OutlinedTextField(
-        value = valueState.value,
-        onValueChange = { valueState.value = it },
-        label = { Text(text = labelID) },
-        singleLine = isSingleLine,
-        textStyle = TextStyle(fontSize = 18.sp, color = MaterialTheme.colors.onBackground),
-        modifier = modifier,
-        enabled = enabled,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
-        keyboardActions = onAction
-    )
-
-}
-
 
 
 
