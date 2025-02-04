@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             DeliverXTheme {
                 DeliverXApp()
+
             }
         }
     }

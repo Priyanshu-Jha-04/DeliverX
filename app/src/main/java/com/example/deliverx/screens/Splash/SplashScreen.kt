@@ -37,7 +37,7 @@ fun SplashScreen(navController: NavController) {
         }
     }
 
-    Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFF387478)) {
+    Surface(modifier = Modifier.fillMaxSize(), color = Color.Black) {
         LottieAnimation(composition = composition, speed = 1f)
     }
 }
