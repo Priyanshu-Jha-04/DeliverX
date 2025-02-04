@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
@@ -51,14 +52,14 @@ import com.example.deliverx.components.GradientTextField
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController) {
-    val email = rememberSaveable { mutableStateOf("") }
+    var email = rememberSaveable { mutableStateOf("") }
     val password = rememberSaveable { mutableStateOf("") }
     val passwordVisibility = rememberSaveable { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
-
     val context = LocalContext.current
+    val isSignInEnabled = email.value.isNotBlank() && password.value.length >= 8
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -163,7 +164,12 @@ fun LoginScreen(navController: NavController) {
                             focusRequester = emailFocusRequester,
                             onNext = {
                                 passwordFocusRequester.requestFocus()
-                            })
+                            },
+                            value = email.value,
+                            onValueChange = { email.value = it  },
+                            trailingIcon = null,
+                            isPassword = false
+                        )
 
                         Spacer(modifier = Modifier.height(16.dp))
 
@@ -202,7 +208,9 @@ fun LoginScreen(navController: NavController) {
                                 },
                                 keyboardType = KeyboardType.Password,
                                 isPassword = true,
-                                focusRequester = passwordFocusRequester
+                                focusRequester = passwordFocusRequester,
+                                value = password.value,
+                                onValueChange = { password.value = it  }
                             )
                         }
 
@@ -216,16 +224,19 @@ fun LoginScreen(navController: NavController) {
                             .height(50.dp)
                             .width(315.dp)
                             .align(Alignment.CenterHorizontally)
-                            .clickable {
-                                //onClick
+                            .clickable(enabled = isSignInEnabled) {
+                                if (isSignInEnabled) {
+                                    Toast.makeText(context, "Sign In Clicked!", Toast.LENGTH_SHORT).show()
+                                }
                             }
+                            .alpha(if (isSignInEnabled) 1f else 0.5f)
                     )
 
                     Image(
                         painter = painterResource(id = R.drawable.or_continue_with), // Replace with your image resource
                         contentDescription = "Image Button", // Provide a meaningful description
                         modifier = Modifier
-                            .padding(top=20.dp)
+                            .padding(top = 20.dp)
                             .height(20.dp)
                             .width(300.dp)
                             .align(Alignment.CenterHorizontally)
@@ -240,7 +251,8 @@ fun LoginScreen(navController: NavController) {
                                 .height(44.dp)
                                 .width(58.dp)
                                 .clickable {
-                                    Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT)
+                                        .show()
                                 }
                         )
                         Image(
@@ -251,7 +263,8 @@ fun LoginScreen(navController: NavController) {
                                 .height(44.dp)
                                 .width(58.dp)
                                 .clickable {
-                                    Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT)
+                                        .show()
                                 }
                         )
                         Image(
@@ -261,8 +274,9 @@ fun LoginScreen(navController: NavController) {
                                 .padding(start = 33.dp)
                                 .height(44.dp)
                                 .width(58.dp)
-                                .clickable{
-                                    Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
+                                .clickable {
+                                    Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT)
+                                        .show()
                                 }
                         )
                     }

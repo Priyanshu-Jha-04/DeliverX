@@ -30,6 +30,8 @@ import androidx.wear.compose.material.Text
 @Composable
 fun GradientTextField(
     modifier: Modifier = Modifier,
+    value : String,
+    onValueChange: (String) -> Unit,
     placeholder: String,
     leadingIcon: @Composable () -> Unit,
     trailingIcon: @Composable (() -> Unit)? = null,
@@ -48,8 +50,8 @@ fun GradientTextField(
     }
 
     BasicTextField(
-        value = text,
-        onValueChange = { text = it },
+        value = value,
+        onValueChange = onValueChange,
         modifier = modifier
             .focusRequester(focusRequester) // Assign focus requester
             .width(314.dp)
@@ -78,7 +80,7 @@ fun GradientTextField(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Box(Modifier.weight(1f)) {
-                    if (text.isEmpty()) {
+                    if (value.isEmpty()) {
                         Text(
                             text = placeholder,
                             color = Color.Gray.copy(alpha = 0.6f)
