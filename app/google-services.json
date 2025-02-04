@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "753358058431",
+    "project_id": "deliver-x-d0c86",
+    "storage_bucket": "deliver-x-d0c86.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:753358058431:android:1a29ac01e09a26a14ce70a",
+        "android_client_info": {
+          "package_name": "com.example.deliverx"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbtMGqQW81EmsMSl7wWGtHnCrz1d51q9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
