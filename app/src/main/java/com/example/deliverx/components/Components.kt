@@ -53,7 +53,7 @@ fun GradientTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier
-            .focusRequester(focusRequester) // Assign focus requester
+            .focusRequester(focusRequester)
             .width(314.dp)
             .height(52.dp)
             .clip(RoundedCornerShape(8.dp))
@@ -67,7 +67,7 @@ fun GradientTextField(
             imeAction = if (onNext != null) ImeAction.Next else ImeAction.Done
         ),
         keyboardActions = KeyboardActions(
-            onNext = { onNext?.invoke() } // Move focus on "Next"
+            onNext = { onNext?.invoke() }
         ),
         visualTransformation = visualTransformation,
         decorationBox = @Composable { innerTextField ->

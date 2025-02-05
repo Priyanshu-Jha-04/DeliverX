@@ -132,7 +132,7 @@ fun LoginScreen(navController: NavController) {
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                     Text(
-                        text = "Together we Travel!!!",
+                        text = "Together we Travel !!",
                         color = Color(0XFFA4A4A4),
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = FontFamily.SansSerif,
@@ -166,7 +166,7 @@ fun LoginScreen(navController: NavController) {
                                 passwordFocusRequester.requestFocus()
                             },
                             value = email.value,
-                            onValueChange = { email.value = it  },
+                            onValueChange = { email.value = it },
                             trailingIcon = null,
                             isPassword = false
                         )
@@ -210,7 +210,7 @@ fun LoginScreen(navController: NavController) {
                                 isPassword = true,
                                 focusRequester = passwordFocusRequester,
                                 value = password.value,
-                                onValueChange = { password.value = it  }
+                                onValueChange = { password.value = it }
                             )
                         }
 
@@ -225,7 +225,8 @@ fun LoginScreen(navController: NavController) {
                             .align(Alignment.CenterHorizontally)
                             .clickable(enabled = isSignInEnabled) {
                                 if (isSignInEnabled) {
-                                    Toast.makeText(context, "Sign In Clicked!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Sign In Clicked!", Toast.LENGTH_SHORT)
+                                        .show()
                                 }
                             }
                             .alpha(if (isSignInEnabled) 1f else 0.5f)
@@ -241,7 +242,7 @@ fun LoginScreen(navController: NavController) {
                             .align(Alignment.CenterHorizontally)
                     )
 
-                    Row (modifier = Modifier.padding(20.dp)) {
+                    Row(modifier = Modifier.padding(20.dp)) {
                         Image(
                             painter = painterResource(id = R.drawable.google_login),
                             contentDescription = "Image Button",
@@ -289,10 +290,10 @@ fun LoginScreen(navController: NavController) {
                             .rotate(33.9F)
                             .graphicsLayer(rotationZ = -33.9f)
                             .zIndex(5f)
-                            .offset(x=235.dp, y =8.dp)
+                            .offset(x = 235.dp, y = 8.dp)
 
                     )
-                }//
+                }
             }
         }
     }

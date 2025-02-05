@@ -9,9 +9,9 @@ enum class DeliverXScreens {
     ProfileScreen,
     SettingsScreen,
     SearchScreen;
+
     companion object {
-        fun fromRoute(route: String?) : DeliverXScreens
-        = when (route?.substringBefore("/")) {
+        fun fromRoute(route: String?): DeliverXScreens = when (route?.substringBefore("/")) {
             SplashScreen.name -> SplashScreen
             LoginScreen.name -> LoginScreen
             SignUpScreen.name -> SignUpScreen
