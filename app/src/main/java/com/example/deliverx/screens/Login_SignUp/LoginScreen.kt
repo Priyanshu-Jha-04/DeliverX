@@ -216,10 +216,9 @@ fun LoginScreen(navController: NavController) {
 
                         Spacer(modifier = Modifier.height(32.dp))
                     }
-                    //
                     Image(
-                        painter = painterResource(id = R.drawable.signin_button), // Replace with your image resource
-                        contentDescription = "Image Button", // Provide a meaningful description
+                        painter = painterResource(id = R.drawable.signin_button),
+                        contentDescription = "Image Button",
                         modifier = Modifier
                             .height(50.dp)
                             .width(315.dp)
@@ -233,8 +232,8 @@ fun LoginScreen(navController: NavController) {
                     )
 
                     Image(
-                        painter = painterResource(id = R.drawable.or_continue_with), // Replace with your image resource
-                        contentDescription = "Image Button", // Provide a meaningful description
+                        painter = painterResource(id = R.drawable.or_continue_with),
+                        contentDescription = "Image Button",
                         modifier = Modifier
                             .padding(top = 20.dp)
                             .height(20.dp)
@@ -280,7 +279,20 @@ fun LoginScreen(navController: NavController) {
                                 }
                         )
                     }
-                }
+
+                    Image(
+                        painter = painterResource(id = R.drawable.book),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .height(160.dp)
+                            .width(185.dp)
+                            .rotate(33.9F)
+                            .graphicsLayer(rotationZ = -33.9f)
+                            .zIndex(5f)
+                            .offset(x=235.dp, y =8.dp)
+
+                    )
+                }//
             }
         }
     }
