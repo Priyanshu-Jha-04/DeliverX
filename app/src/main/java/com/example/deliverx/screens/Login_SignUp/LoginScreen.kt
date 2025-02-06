@@ -48,6 +48,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.wear.compose.material.MaterialTheme
 import com.example.deliverx.R
 import com.example.deliverx.components.GradientTextField
+import com.example.deliverx.navigation.DeliverXScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -232,6 +233,25 @@ fun LoginScreen(navController: NavController) {
                             .alpha(if (isSignInEnabled) 1f else 0.5f)
                     )
 
+                    Button(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        onClick = { navController.navigate(DeliverXScreens.SignUpScreen.name) },
+                        colors = ButtonDefaults.buttonColors(Color.Transparent),
+
+                    ) {
+                        Row() {
+                            Text("Don't have an Account?",
+                                color = Color(0XFFA4A4A4),
+                                fontSize = (14.33).sp,
+                                fontWeight = FontWeight.SemiBold,
+                                fontFamily = FontFamily.Default)
+                            Text(text = " Sign Up",
+                                color = Color.LightGray,
+                                fontSize = (14.33).sp,
+                                fontWeight = FontWeight.SemiBold,
+                                fontFamily = FontFamily.Default,)
+                        }
+                    }
                     Image(
                         painter = painterResource(id = R.drawable.or_continue_with),
                         contentDescription = "Image Button",

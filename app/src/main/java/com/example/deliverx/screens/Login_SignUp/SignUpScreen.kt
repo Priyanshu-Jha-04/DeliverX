@@ -1,27 +1,51 @@
 package com.example.deliverx.screens.Login_SignUp
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.PeopleAlt
+import androidx.compose.material.icons.filled.Person4
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,9 +54,25 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.deliverx.R
+import com.example.deliverx.components.GradientTextField
+import com.example.deliverx.navigation.DeliverXScreens
 
 @Composable
 fun SignUpScreen(navController: NavController) {
+    var email = rememberSaveable { mutableStateOf("") }
+    val password = rememberSaveable { mutableStateOf("") }
+    var FName = rememberSaveable { mutableStateOf("") }
+    val LName = rememberSaveable { mutableStateOf("") }
+    val MobNo = rememberSaveable { mutableStateOf("") }
+    val FNameFocusRequester = remember { FocusRequester() }
+    val LNameFocusRequester = remember { FocusRequester() }
+    val MobNoFocusRequester = remember { FocusRequester() }
+    val emailFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
+    val passwordVisibility = rememberSaveable { mutableStateOf(false) }
+    val isSignInEnabled = email.value.isNotBlank() && password.value.isNotBlank() && FName.value.isNotBlank() && LName.value.isNotBlank() && MobNo.value.isNotBlank()
+    val context = LocalContext.current
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.Black
@@ -124,9 +164,9 @@ fun SignUpScreen(navController: NavController) {
                     .rotate(33.9F)
                     .graphicsLayer(rotationZ = -33.9f)
                     .zIndex(4f)
-                    .offset(x = 215.dp,y = 700.dp),
+                    .offset(x = 215.dp, y = 700.dp),
 
-            )
+                )
 
             Box(
                 modifier = Modifier
@@ -137,8 +177,7 @@ fun SignUpScreen(navController: NavController) {
             ) {
                 Column(
                     Modifier
-                        .fillMaxSize()
-                        .padding(5.dp),
+                        .fillMaxSize(),
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -157,7 +196,226 @@ fun SignUpScreen(navController: NavController) {
                         fontFamily = FontFamily.SansSerif,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(15.dp)
+                            .zIndex(7f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        Row {
+                            GradientTextField(
+                                placeholder = "First Name",
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.PeopleAlt,
+                                        contentDescription = "Person Icon",
+                                        tint = Color.White
+                                    )
+                                },
+                                trailingIcon = null,
+                                keyboardType = KeyboardType.Text,
+                                focusRequester = FNameFocusRequester,
+                                onNext = {
+                                    LNameFocusRequester.requestFocus()
+                                },
+                                value = FName.value,
+                                onValueChange = { FName.value = it },
+                                isPassword = false,
+                                modifier = Modifier
+                                    .height(52.dp)
+                                    .width(190.dp)
+                                    .padding(start = 25.dp, end = 10.dp)
+                            )
+                            GradientTextField(
+                                placeholder = "Last Name",
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.PeopleAlt,
+                                        contentDescription = "Person Icon",
+                                        tint = Color.White
+                                    )
+                                },
+                                trailingIcon = null,
+                                keyboardType = KeyboardType.Text,
+                                focusRequester = LNameFocusRequester,
+                                onNext = {
+                                    emailFocusRequester.requestFocus()
+                                },
+                                value = LName.value,
+                                onValueChange = { LName.value = it },
+                                isPassword = false, modifier = Modifier
+                                    .height(52.dp)
+                                    .width(190.dp)
+                                    .padding(start = 2.dp, end = 25.dp)
+                            )
+                        }
 
+                        Spacer(modifier = Modifier.padding(10.dp))
+
+                        GradientTextField(
+                            modifier = Modifier,
+                            placeholder = "Enter Email",
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Email,
+                                    contentDescription = "Email Icon",
+                                    tint = Color.White
+                                )
+                            },
+                            keyboardType = KeyboardType.Email,
+                            focusRequester = emailFocusRequester,
+                            onNext = {
+                                passwordFocusRequester.requestFocus()
+                            },
+                            value = email.value,
+                            onValueChange = { email.value = it },
+                            trailingIcon = null,
+                            isPassword = false
+                        )
+
+                        Spacer(modifier = Modifier.padding(10.dp))
+
+                        GradientTextField(
+                            placeholder = "Enter Password",
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Lock,
+                                    contentDescription = "Lock Icon",
+                                    tint = Color.White
+                                )
+                            },
+                            trailingIcon = {
+                                IconButton(onClick = {
+                                    passwordVisibility.value = !passwordVisibility.value
+                                }) {
+                                    Icon(
+                                        imageVector = if (passwordVisibility.value) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                        contentDescription = "Toggle Password Visibility",
+                                        tint = Color.White
+                                    )
+                                }
+                            },
+                            keyboardType = KeyboardType.Password,
+                            isPassword = true,
+                            focusRequester = passwordFocusRequester,
+                            onNext = {
+                                MobNoFocusRequester.requestFocus()
+                            },
+                            value = password.value,
+                            onValueChange = { password.value = it }
+                        )
+
+                        Spacer(modifier = Modifier.padding(10.dp))
+
+                        GradientTextField(
+                            modifier = Modifier,
+                            placeholder = "Mobile Number",
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Phone,
+                                    contentDescription = "Phone Icon",
+                                    tint = Color.White
+                                )
+                            },
+                            keyboardType = KeyboardType.Phone,
+                            focusRequester = MobNoFocusRequester,
+                            value = MobNo.value,
+                            onValueChange = { MobNo.value = it },
+                            trailingIcon = null,
+                            isPassword = false
+                        )
+
+                        Spacer(modifier = Modifier.padding(10.dp))
+
+                        Image(
+                            painter = painterResource(id = R.drawable.signin_button),
+                            contentDescription = "Image Button",
+                            modifier = Modifier
+                                .height(50.dp)
+                                .width(315.dp)
+                                .align(Alignment.CenterHorizontally)
+                                .clickable(enabled = isSignInEnabled) {
+                                    if (!isSignInEnabled) {
+                                        Toast.makeText(context, "Fill up all the details!", Toast.LENGTH_LONG)
+                                            .show()
+                                    }
+                                    if (isSignInEnabled && password.value.length < 8) {
+                                        Toast.makeText(context, "Password must of at least 8 characters!", Toast.LENGTH_LONG)
+                                            .show()
+                                    }
+                                }
+                                .alpha(if (isSignInEnabled) 1f else 0.5f)
+                        )
+                        Button(
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            onClick = { navController.navigate(DeliverXScreens.LoginScreen.name) },
+                            colors = ButtonDefaults.buttonColors(Color.Transparent),
+
+                            ) {
+                            Row() {
+                                Text("Already have an Account?",
+                                    color = Color(0XFFA4A4A4),
+                                    fontSize = (14.33).sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontFamily = FontFamily.Default)
+                                Text(text = " Sign In",
+                                    color = Color.LightGray,
+                                    fontSize = (14.33).sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontFamily = FontFamily.Default,)
+                            }
+                        }
+
+                        Image(
+                            painter = painterResource(id = R.drawable.or_continue_with),
+                            contentDescription = "Image Button",
+                            modifier = Modifier
+                                .padding(top = 1.dp)
+                                .height(20.dp)
+                                .width(300.dp)
+                                .align(Alignment.CenterHorizontally)
+                        )
+
+                        Row(modifier = Modifier.padding(top = 10.dp)) {
+                            Image(
+                                painter = painterResource(id = R.drawable.google_login),
+                                contentDescription = "Image Button",
+                                modifier = Modifier
+                                    .height(44.dp)
+                                    .width(58.dp)
+                                    .clickable {
+                                        Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                            )
+                            Image(
+                                painter = painterResource(id = R.drawable.apple_login),
+                                contentDescription = "Image Button",
+                                modifier = Modifier
+                                    .padding(start = 33.dp)
+                                    .height(44.dp)
+                                    .width(58.dp)
+                                    .clickable {
+                                        Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                            )
+                            Image(
+                                painter = painterResource(id = R.drawable.fb_login),
+                                contentDescription = "Image Button",
+                                modifier = Modifier
+                                    .padding(start = 33.dp)
+                                    .height(44.dp)
+                                    .width(58.dp)
+                                    .clickable {
+                                        Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                            )
+                        }
+                    }
                 }
             }
         }
