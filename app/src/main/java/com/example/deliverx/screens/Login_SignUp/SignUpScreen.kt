@@ -1,5 +1,7 @@
 package com.example.deliverx.screens.Login_SignUp
 
+import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -30,9 +32,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,6 +60,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.deliverx.R
 import com.example.deliverx.components.GradientTextField
 import com.example.deliverx.navigation.DeliverXScreens
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun SignUpScreen(navController: NavController) {
@@ -72,6 +78,43 @@ fun SignUpScreen(navController: NavController) {
     val passwordVisibility = rememberSaveable { mutableStateOf(false) }
     val isSignInEnabled = email.value.isNotBlank() && password.value.isNotBlank() && FName.value.isNotBlank() && LName.value.isNotBlank() && MobNo.value.isNotBlank()
     val context = LocalContext.current
+    var isLoading by rememberSaveable { mutableStateOf(false) }
+    fun saveLoginState(context: Context, isLoggedIn: Boolean) {
+        val preferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        preferences.edit().putBoolean("isLoggedIn", isLoggedIn).apply()
+    }
+
+
+    fun signUp() {
+        isLoading = true
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.value, password.value)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val userId = task.result?.user?.uid ?: ""
+                    val user = hashMapOf(
+                        "firstName" to FName.value.trim(),
+                        "lastName" to LName.value.trim(),
+                        "email" to email.value.trim(),
+                        "mobile" to MobNo.value.trim()
+                    )
+                    FirebaseFirestore.getInstance().collection("users").document(userId)
+                        .set(user)
+                        .addOnSuccessListener {
+                            Toast.makeText(context, "Sign Up Successful", Toast.LENGTH_SHORT).show()
+                            navController.navigate(DeliverXScreens.HomeScreen.name)
+                            saveLoginState(context, true)
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(context, "Error saving user data", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Log.d("Failure", "${task.exception}")
+                    Toast.makeText(context, "Sign Up Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+                isLoading = false
+            }
+    }
+
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -330,7 +373,7 @@ fun SignUpScreen(navController: NavController) {
                         Spacer(modifier = Modifier.padding(10.dp))
 
                         Image(
-                            painter = painterResource(id = R.drawable.signin_button),
+                            painter = painterResource(id = R.drawable.signup_button),
                             contentDescription = "Image Button",
                             modifier = Modifier
                                 .height(50.dp)
@@ -338,12 +381,22 @@ fun SignUpScreen(navController: NavController) {
                                 .align(Alignment.CenterHorizontally)
                                 .clickable(enabled = isSignInEnabled) {
                                     if (!isSignInEnabled) {
-                                        Toast.makeText(context, "Fill up all the details!", Toast.LENGTH_LONG)
+                                        Toast.makeText(
+                                            context,
+                                            "Fill up all the details!",
+                                            Toast.LENGTH_LONG
+                                        )
                                             .show()
                                     }
                                     if (isSignInEnabled && password.value.length < 8) {
-                                        Toast.makeText(context, "Password must of at least 8 characters!", Toast.LENGTH_LONG)
+                                        Toast.makeText(
+                                            context,
+                                            "Password must of at least 8 characters!",
+                                            Toast.LENGTH_LONG
+                                        )
                                             .show()
+                                    } else if (isSignInEnabled) {
+                                        signUp()
                                     }
                                 }
                                 .alpha(if (isSignInEnabled) 1f else 0.5f)
@@ -428,3 +481,4 @@ fun SignUpScreenPreview() {
     val navController = rememberNavController()
     SignUpScreen(navController = navController)
 }
+

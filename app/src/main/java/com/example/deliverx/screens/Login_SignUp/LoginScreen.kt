@@ -1,5 +1,6 @@
 package com.example.deliverx.screens.Login_SignUp
 
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -49,6 +50,7 @@ import androidx.wear.compose.material.MaterialTheme
 import com.example.deliverx.R
 import com.example.deliverx.components.GradientTextField
 import com.example.deliverx.navigation.DeliverXScreens
+import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,6 +63,25 @@ fun LoginScreen(navController: NavController) {
     val passwordFocusRequester = remember { FocusRequester() }
     val context = LocalContext.current
     val isSignInEnabled = email.value.isNotBlank() && password.value.length >= 8
+    var isLoading by rememberSaveable { mutableStateOf(false) }
+
+    fun signIn() {
+        isLoading = true
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email.value, password.value)
+            .addOnCompleteListener { task ->
+                isLoading = false
+                if (task.isSuccessful) {
+                    Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+                    navController.navigate(DeliverXScreens.HomeScreen.name)
+                } else {
+                    Toast.makeText(context, "Login Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+    fun saveLoginState(context: Context, isLoggedIn: Boolean) {
+        val preferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        preferences.edit().putBoolean("isLoggedIn", isLoggedIn).apply()
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -226,8 +247,8 @@ fun LoginScreen(navController: NavController) {
                             .align(Alignment.CenterHorizontally)
                             .clickable(enabled = isSignInEnabled) {
                                 if (isSignInEnabled) {
-                                    Toast.makeText(context, "Sign In Clicked!", Toast.LENGTH_SHORT)
-                                        .show()
+                                    signIn()
+                                    saveLoginState(context, true)
                                 }
                             }
                             .alpha(if (isSignInEnabled) 1f else 0.5f)

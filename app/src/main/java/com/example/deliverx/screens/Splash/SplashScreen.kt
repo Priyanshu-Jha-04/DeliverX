@@ -33,7 +33,9 @@ fun SplashScreen(navController: NavController) {
             navController.navigate(
                 if (isLoggedIn) DeliverXScreens.HomeScreen.name
                 else DeliverXScreens.LoginScreen.name
-            )
+            ) {
+                popUpTo(0)
+            }
         }
     }
 

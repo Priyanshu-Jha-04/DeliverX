@@ -76,8 +76,10 @@ dependencies {
     implementation(platform(libs.firebase.bom))
 
     // Firebase Authentication and Cloud Firestore
+
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation(platform("com.google.firebase:firebase-bom:33.8.0"))
 
     // Dagger-Hilt
     implementation(libs.hilt.android)
