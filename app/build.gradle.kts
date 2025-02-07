@@ -75,11 +75,11 @@ dependencies {
     // Firebase BoM
     implementation(platform(libs.firebase.bom))
 
-    // Firebase Authentication and Cloud Firestore
+    // Firebase Authentication and Cloud Fire-store
 
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
-    implementation(platform("com.google.firebase:firebase-bom:33.8.0"))
+    implementation(platform(libs.firebase.bom))
 
     // Dagger-Hilt
     implementation(libs.hilt.android)
@@ -118,6 +118,9 @@ dependencies {
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.compose.ui.tooling)
 
+    // Google Maps Dependency
+    implementation(libs.maps.compose)
+    implementation (libs.play.services.location)
 
 }
 

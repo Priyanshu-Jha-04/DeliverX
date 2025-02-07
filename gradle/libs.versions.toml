@@ -23,6 +23,8 @@ composeBom = "2024.04.01"
 lifecycleViewmodelKtx = "2.8.7"
 lottie = "6.6.2"
 lottieCompose = "6.6.2"
+mapsCompose = "6.4.1"
+playServicesLocation = "21.3.0"
 runtime = "1.7.7"
 kotlinxCoroutinesPlayServices = "2.0.0"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
@@ -77,6 +79,8 @@ kotlinx-coroutines-play-services-v173 = { module = "org.jetbrains.kotlinx:kotlin
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
