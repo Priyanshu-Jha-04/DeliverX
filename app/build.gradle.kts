@@ -9,7 +9,8 @@ plugins {
     //Dagger-Hilt
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
-    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
+    //alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -64,6 +65,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.material)
     implementation(libs.androidx.annotation)
+    implementation(libs.places)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
