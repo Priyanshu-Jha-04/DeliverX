@@ -332,7 +332,7 @@ fun SignUpScreen(navController: NavController) {
                         Spacer(modifier = Modifier.padding(10.dp))
 
                         GradientTextField(
-                            placeholder = "Enter Password",
+                            placeholder = "Create Password",
                             leadingIcon = {
                                 Icon(
                                     imageVector = Icons.Default.Lock,
