@@ -5,6 +5,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -62,7 +65,7 @@ import com.example.deliverx.components.GradientTextField
 import com.example.deliverx.navigation.DeliverXScreens
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-
+ 
 @Composable
 fun SignUpScreen(navController: NavController) {
     var email = rememberSaveable { mutableStateOf("") }
@@ -83,6 +86,7 @@ fun SignUpScreen(navController: NavController) {
         val preferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         preferences.edit().putBoolean("isLoggedIn", isLoggedIn).apply()
     }
+    var offset by remember { mutableStateOf(0f) }
 
 
     fun signUp() {
@@ -117,7 +121,14 @@ fun SignUpScreen(navController: NavController) {
 
 
     Surface(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .scrollable(
+                orientation = Orientation.Vertical,
+                state = rememberScrollableState { delta ->
+                    offset += delta
+                    delta // Consume the entire delta
+                }
+            ),
         color = Color.Black
     ) {
         Box(

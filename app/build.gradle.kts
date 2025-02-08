@@ -123,6 +123,11 @@ dependencies {
     // Google Maps Dependency
     implementation(libs.maps.compose)
     implementation (libs.play.services.location)
+    implementation(libs.androidx.navigation.compose)
+
+    // Animated Navigation Bar
+    implementation(libs.animated.navigation.bar)
+
 
 }
 

@@ -7,6 +7,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -64,6 +67,7 @@ fun LoginScreen(navController: NavController) {
     val context = LocalContext.current
     val isSignInEnabled = email.value.isNotBlank() && password.value.length >= 8
     var isLoading by rememberSaveable { mutableStateOf(false) }
+    var offset by remember { mutableStateOf(0f) }
 
     fun signIn() {
         isLoading = true
@@ -84,7 +88,14 @@ fun LoginScreen(navController: NavController) {
     }
 
     Surface(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .scrollable(
+                orientation = Orientation.Vertical,
+                state = rememberScrollableState { delta ->
+                    offset += delta
+                    delta // Consume the entire delta
+                }
+            ),
         color = Color.Black
     ) {
         Box(
