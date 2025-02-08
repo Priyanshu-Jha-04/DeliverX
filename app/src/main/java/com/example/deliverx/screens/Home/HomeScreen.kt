@@ -27,10 +27,31 @@ import com.exyte.animatednavbar.animation.balltrajectory.Straight
 import com.exyte.animatednavbar.animation.indendshape.Height
 import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
 import com.exyte.animatednavbar.utils.noRippleClickable
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.rememberMarkerState
 
 
 @Composable
 fun HomeScreen(navController: NavController) {
+    val location = LatLng(28.7041, 77.1025) // Example: Delhi, India
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(location, 10f)
+    }
+
+    GoogleMap(
+        modifier = Modifier.fillMaxSize(),
+        cameraPositionState = cameraPositionState
+    ) {
+        Marker(
+            state = rememberMarkerState(position = location),
+            title = "Marker in Delhi",
+            snippet = "This is the capital of India"
+        )
+    }
 
 }
 
