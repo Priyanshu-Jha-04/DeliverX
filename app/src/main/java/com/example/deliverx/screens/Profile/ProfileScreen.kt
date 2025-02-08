@@ -15,9 +15,3 @@ fun ProfileScreen(navController: NavController) {
 
 }
 
-@Composable
-fun ProfileContent() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Profile Screen", color = Color.Black)
-    }
-}

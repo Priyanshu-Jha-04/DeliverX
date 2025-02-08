@@ -127,10 +127,12 @@ dependencies {
 
     // Animated Navigation Bar
     implementation(libs.animated.navigation.bar)
-
+    implementation("androidx.navigation:navigation-compose:2.7.6")
 
 }
 
 kapt {
     correctErrorTypes = true
 }
+
+

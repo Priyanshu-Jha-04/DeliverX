@@ -14,10 +14,3 @@ import androidx.navigation.NavHostController
 fun SettingsScreen(navController: NavController) {
 
 }
-
-@Composable
-fun SettingsContent() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Settings Screen", color = Color.Black)
-    }
-}
