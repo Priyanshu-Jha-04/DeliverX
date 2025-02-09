@@ -25,6 +25,7 @@ android {
         versionName = "1.0"
         manifestPlaceholders["MAPS_API_KEY"] = project.findProperty("MAPS_API_KEY") ?: ""
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -124,10 +125,15 @@ dependencies {
     implementation(libs.maps.compose)
     implementation (libs.play.services.location)
     implementation(libs.androidx.navigation.compose)
+    implementation (libs.android.maps.utils)
 
     // Animated Navigation Bar
     implementation(libs.animated.navigation.bar)
-    implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation(libs.androidx.navigation.compose.v276)
+
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+    implementation ("com.google.android.libraries.places:places:4.1.0")
+    implementation ("com.google.android.gms:play-services-maps:19.0.0")
 
 }
 
