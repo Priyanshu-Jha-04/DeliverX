@@ -234,7 +234,6 @@ suspend fun findShortestRoute(locations: List<LatLng>, generations: Int = 300, p
     return population.minByOrNull { it.distance }?.locations ?: locations
 }
 
-// 1️⃣ Generate Random Population
 fun generateInitialPopulation(locations: List<LatLng>, size: Int): List<Route> {
     return List(size) {
         val shuffled = locations.shuffled()
