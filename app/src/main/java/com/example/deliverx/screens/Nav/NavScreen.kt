@@ -13,12 +13,7 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun NavScreen(navController: NavController) {
-    Surface  (
-        modifier = Modifier.fillMaxSize(),
-        color = Color.Black
-    ) {
 
-    }
 }
 
 

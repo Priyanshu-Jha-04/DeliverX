@@ -13,11 +13,6 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun ProfileScreen(navController: NavController) {
-    Surface  (
-        modifier = Modifier.fillMaxSize(),
-        color = Color.Black
-    ) {
 
-    }
 }
 

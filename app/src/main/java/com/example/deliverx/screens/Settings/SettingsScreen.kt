@@ -13,10 +13,5 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun SettingsScreen(navController: NavController) {
-    Surface  (
-        modifier = Modifier.fillMaxSize(),
-        color = Color.Black
-    ) {
 
-    }
 }
