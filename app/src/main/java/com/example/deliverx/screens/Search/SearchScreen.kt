@@ -46,7 +46,6 @@ fun SearchScreen(navController: NavController) {
         )
         {
             val numberOptions = (1..5).toList()
-
             DropDownTextField(
                 options = numberOptions,
                 label = "Choose a number",
