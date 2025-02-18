@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.deliverx.DeliverXApplication
 import com.example.deliverx.screens.Home.HomeScreen
 import com.example.deliverx.screens.Login_SignUp.LoginScreen
 import com.example.deliverx.screens.Login_SignUp.SignUpScreen
@@ -13,6 +14,8 @@ import com.example.deliverx.screens.Profile.ProfileScreen
 import com.example.deliverx.screens.Search.SearchScreen
 import com.example.deliverx.screens.Settings.SettingsScreen
 import com.example.deliverx.screens.Splash.SplashScreen
+import com.google.android.libraries.places.api.Places
+import com.google.api.Context
 
 
 @Composable
