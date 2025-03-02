@@ -94,7 +94,11 @@ fun LoginScreen(navController: NavController) {
                     saveLoginState(context, true)
                     navController.navigate(DeliverXScreens.HomeScreen.name)
                 } else {
-                    Toast.makeText(context, "Login Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Login Failed: ${task.exception?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
     }
@@ -367,9 +371,11 @@ fun LoginScreen(navController: NavController) {
                         // Sign Up link - match button from SignUpScreen
                         Button(
                             modifier = Modifier.align(Alignment.CenterHorizontally),
-                            onClick = { navController.navigate(DeliverXScreens.SignUpScreen.name){
-                                popUpTo(DeliverXScreens.LoginScreen.name) { inclusive = true }
-                            } },
+                            onClick = {
+                                navController.navigate(DeliverXScreens.SignUpScreen.name) {
+                                    popUpTo(DeliverXScreens.LoginScreen.name) { inclusive = true }
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(Color.Transparent)
                         ) {
                             Row {
