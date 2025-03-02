@@ -122,7 +122,8 @@ fun SignUpScreen(navController: NavController) {
                             saveLoginState(context, true)
                         }
                         .addOnFailureListener {
-                            Toast.makeText(context, "Error saving user data", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Error saving user data", Toast.LENGTH_SHORT)
+                                .show()
                         }
                 } else {
                     Log.d("Failure", "${task.exception}")
