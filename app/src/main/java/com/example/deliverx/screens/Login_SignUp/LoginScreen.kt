@@ -1,47 +1,53 @@
 package com.example.deliverx.screens.Login_SignUp
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.AbsoluteAlignment
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,25 +55,34 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import androidx.wear.compose.material.MaterialTheme
 import com.example.deliverx.R
 import com.example.deliverx.components.GradientTextField
 import com.example.deliverx.navigation.DeliverXScreens
 import com.google.firebase.auth.FirebaseAuth
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController) {
+    // Get screen dimensions for responsive sizing
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val screenHeight = configuration.screenHeightDp.dp
+    val density = LocalDensity.current
+
+    // States
     var email = rememberSaveable { mutableStateOf("") }
     val password = rememberSaveable { mutableStateOf("") }
     val passwordVisibility = rememberSaveable { mutableStateOf(false) }
-    val keyboardController = LocalSoftwareKeyboardController.current
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
-    val context = LocalContext.current
     val isSignInEnabled = email.value.isNotBlank() && password.value.length >= 8
+    val context = LocalContext.current
     var isLoading by rememberSaveable { mutableStateOf(false) }
-    var offset by remember { mutableStateOf(0f) }
+    val scrollState = rememberScrollState()
+
+    fun saveLoginState(context: Context, isLoggedIn: Boolean) {
+        val preferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        preferences.edit().putBoolean("isLoggedIn", isLoggedIn).apply()
+    }
 
     fun signIn() {
         isLoading = true
@@ -76,150 +91,225 @@ fun LoginScreen(navController: NavController) {
                 isLoading = false
                 if (task.isSuccessful) {
                     Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+                    saveLoginState(context, true)
                     navController.navigate(DeliverXScreens.HomeScreen.name)
                 } else {
                     Toast.makeText(context, "Login Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
-    fun saveLoginState(context: Context, isLoggedIn: Boolean) {
-        val preferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        preferences.edit().putBoolean("isLoggedIn", isLoggedIn).apply()
-    }
 
     Surface(
-        modifier = Modifier.fillMaxSize()
-            .scrollable(
-                orientation = Orientation.Vertical,
-                state = rememberScrollableState { delta ->
-                    offset += delta
-                    delta // Consume the entire delta
-                }
-            ),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState),
         color = Color.Black
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxSize()
         ) {
+            // Background and decorative elements
             Image(
                 painter = painterResource(R.drawable.login_animated),
                 contentDescription = "Background Image",
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(393.dp)
+                    .fillMaxWidth(0.9f)
+                    .offset(x = (screenWidth * 0.11f), y = (screenHeight * 0.0f))
+                    .height(screenHeight * 0.25f)
                     .zIndex(0f),
-                alignment = Alignment.TopStart
+                alignment = Alignment.TopEnd,
+                contentScale = ContentScale.FillWidth
             )
+
+            // Decorative shape elements
+            Image(
+                painter = painterResource(id = R.drawable.signup_shape1),
+                contentDescription = "Foreground",
+                modifier = Modifier
+                    .width(screenWidth * 0.5f)
+                    .height(screenHeight * 0.15f)
+                    .zIndex(1f)
+                    .rotate(33.9F)
+                    .graphicsLayer(rotationZ = -33.9f)
+                    .offset(x = (screenWidth * -0.07f)),
+                contentScale = ContentScale.Fit
+            )
+
             Image(
                 painter = painterResource(id = R.drawable.login_ani_top),
                 contentDescription = "Foreground",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(197.dp)
-                    .offset(y = (-49).dp)
-                    .zIndex(1f)
+                    .height(screenHeight * 0.22f)
+                    .offset(y = (screenHeight * -0.05f))
+                    .zIndex(1f),
+                contentScale = ContentScale.FillWidth
             )
+
+            // Similar gradient as in signup screen
             Image(
-                painter = painterResource(id = R.drawable.element_01),
+                painter = painterResource(id = R.drawable.su_gradient),
                 contentDescription = null,
                 modifier = Modifier
-                    .width(130.dp)
-                    .height(139.dp)
-                    .zIndex(4f)
+                    .width(screenWidth * 0.42f)
+                    .height(screenHeight * 0.17f)
+                    .zIndex(2f)
                     .rotate(18.69F)
                     .graphicsLayer(rotationZ = -18.69f)
-                    .offset(x = 262.dp, y = 205.dp),
-                alignment = AbsoluteAlignment.BottomRight
+                    .offset(x = screenWidth * 0.67f, y = screenHeight * 0.22f),
+                contentScale = ContentScale.Fit
             )
+
+            // Main background
             Image(
                 painter = painterResource(id = R.drawable.login_bg),
                 contentDescription = null,
                 modifier = Modifier
-                    .width(944.dp)
-                    .height(1037.dp)
+                    .fillMaxWidth()
+                    .height(screenHeight * 1.1f)
                     .zIndex(3f)
-                    .offset(x = (-1).dp, y = 55.dp)
-                    .graphicsLayer(scaleX = 1.01f, scaleY = 1.01f)
+                    .offset(x = screenWidth * -0.01f, y = screenHeight * 0.08f)
+                    .graphicsLayer(
+                        scaleX = 1.05f,
+                        scaleY = 1.01f
+                    ),
+                contentScale = ContentScale.FillBounds
             )
 
+            // Additional decorative elements
+            Image(
+                painter = painterResource(id = R.drawable.element_01),
+                contentDescription = null,
+                modifier = Modifier
+                    .width(screenWidth * 0.22f)
+                    .height(screenHeight * 0.12f)
+                    .zIndex(4f)
+                    .rotate(18.69F)
+                    .graphicsLayer(rotationZ = -18.69f)
+                    .offset(x = screenWidth * 0.87f, y = screenHeight * 0.28f),
+                contentScale = ContentScale.Fit
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.su_g),
+                contentDescription = "Foreground",
+                modifier = Modifier
+                    .width(screenWidth * 0.54f)
+                    .height(screenHeight * 0.16f)
+                    .zIndex(4f)
+                    .offset(x = (screenWidth * -0.125f), y = screenHeight * 0.22f)
+                    .rotate(66.69F)
+                    .graphicsLayer(rotationZ = -66.69f),
+                contentScale = ContentScale.Fit
+            )
+
+            // Bottom decorative element
+            Image(
+                painter = painterResource(id = R.drawable.book),
+                contentDescription = null,
+                modifier = Modifier
+                    .height(screenHeight * 0.17f)
+                    .width(screenWidth * 0.51f)
+                    .rotate(33.9F)
+                    .graphicsLayer(rotationZ = -33.9f)
+                    .zIndex(4f)
+                    .align(Alignment.BottomEnd)
+                    .offset(x = screenWidth * 0.06f, y = screenHeight * -0.09f),
+                contentScale = ContentScale.Fit
+            )
+
+            // Main content container
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .zIndex(4f)
-                    .padding(top = 265.dp),
+                    .padding(top = screenHeight * 0.28f),
                 contentAlignment = Alignment.TopCenter
             ) {
                 Column(
-                    Modifier
-                        .fillMaxSize()
-                        .padding(5.dp),
-                    verticalArrangement = Arrangement.Top
+                    Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    // Main headings
+
                     Text(
                         text = "Welcome Back!",
                         color = Color(0XFFFFFAEC),
-                        fontSize = 39.sp,
+                        fontSize = (screenWidth * 0.11f).value.sp,
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = FontFamily.Serif,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
+
                     Text(
                         text = "Together we Travel !!",
                         color = Color(0XFFA4A4A4),
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = FontFamily.SansSerif,
+                        fontSize = (screenWidth * 0.04f).value.sp,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
-                    Text(
-                        text = "Email ID",
-                        color = Color(0XFFA4A4A4),
-                        fontSize = (14.33).sp,
-                        fontWeight = FontWeight.SemiBold,
-                        fontFamily = FontFamily.Serif,
-                        modifier = Modifier.padding(top = 40.dp, start = 49.dp)
-                    )
+
+                    // Form fields container
                     Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(screenWidth * 0.04f)
+                            .zIndex(7f),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(end = 40.dp)
+                        verticalArrangement = Arrangement.Top
                     ) {
-                        GradientTextField(
-                            modifier = Modifier.padding(start = 40.dp),
-                            placeholder = "Enter Email",
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Email,
-                                    contentDescription = "Email Icon",
-                                    tint = Color.White
-                                )
-                            },
-                            keyboardType = KeyboardType.Email,
-                            focusRequester = emailFocusRequester,
-                            onNext = {
-                                passwordFocusRequester.requestFocus()
-                            },
-                            value = email.value,
-                            onValueChange = { email.value = it },
-                            trailingIcon = null,
-                            isPassword = false
+
+                        Spacer(modifier = Modifier.padding(screenHeight * 0.02f))
+                        // Email field
+                        Text(
+                            text = "Email ID",
+                            color = Color(0XFFA4A4A4),
+                            fontSize = (14.33).sp,
+                            fontWeight = FontWeight.SemiBold,
+                            fontFamily = FontFamily.Serif,
+                            modifier = Modifier.padding(top = 1.dp, end = 230.dp)
                         )
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-
                         Column(
-                            modifier = Modifier.padding(start = 40.dp)
+                            modifier = Modifier.padding(start = 30.dp, end = 30.dp)
                         ) {
-                            Text(
-                                text = "Password",
-                                color = Color(0XFFA4A4A4),
-                                fontSize = (14.33).sp,
-                                fontWeight = FontWeight.SemiBold,
-                                fontFamily = FontFamily.Serif,
-                                modifier = Modifier.padding(top = 1.dp, start = 9.dp)
-                            )
-
                             GradientTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                placeholder = "Enter Email",
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Email,
+                                        contentDescription = "Email Icon",
+                                        tint = Color.White
+                                    )
+                                },
+                                keyboardType = KeyboardType.Email,
+                                focusRequester = emailFocusRequester,
+                                onNext = { passwordFocusRequester.requestFocus() },
+                                value = email.value,
+                                onValueChange = { email.value = it },
+                                trailingIcon = null,
+                                isPassword = false
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.padding(screenHeight * 0.01f))
+
+                        // Password field
+                        Text(
+                            text = "Password",
+                            color = Color(0XFFA4A4A4),
+                            fontSize = (14.33).sp,
+                            fontWeight = FontWeight.SemiBold,
+                            fontFamily = FontFamily.Serif,
+                            modifier = Modifier.padding(top = 1.dp, end = 220.dp)
+                        )
+                        Column(
+                            modifier = Modifier.padding(start = 30.dp, end = 30.dp)
+                        ) {
+                            GradientTextField(
+                                modifier = Modifier.fillMaxWidth(),
                                 placeholder = "Enter Password",
                                 leadingIcon = {
                                     Icon(
@@ -247,104 +337,122 @@ fun LoginScreen(navController: NavController) {
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(32.dp))
-                    }
-                    Image(
-                        painter = painterResource(id = R.drawable.signin_button),
-                        contentDescription = "Image Button",
-                        modifier = Modifier
-                            .height(50.dp)
-                            .width(315.dp)
-                            .align(Alignment.CenterHorizontally)
-                            .clickable(enabled = isSignInEnabled) {
-                                if (isSignInEnabled) {
-                                    signIn()
-                                    saveLoginState(context, true)
+                        Spacer(modifier = Modifier.padding(screenHeight * 0.02f))
+
+                        // Sign In button
+                        Image(
+                            painter = painterResource(id = R.drawable.signin_button),
+                            contentDescription = "Image Button",
+                            modifier = Modifier
+                                .height(screenHeight * 0.055f)
+                                .fillMaxWidth(0.85f)
+                                .align(Alignment.CenterHorizontally)
+                                .clickable(enabled = isSignInEnabled) {
+                                    if (!isSignInEnabled) {
+                                        Toast.makeText(
+                                            context,
+                                            "Fill up all the details!",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    } else {
+                                        signIn()
+                                    }
                                 }
+                                .alpha(if (isSignInEnabled) 1f else 0.5f),
+                            contentScale = ContentScale.FillWidth
+                        )
+
+                        Spacer(modifier = Modifier.padding(screenHeight * 0.00f))
+
+                        // Sign Up link - match button from SignUpScreen
+                        Button(
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            onClick = { navController.navigate(DeliverXScreens.SignUpScreen.name){
+                                popUpTo(DeliverXScreens.LoginScreen.name) { inclusive = true }
+                            } },
+                            colors = ButtonDefaults.buttonColors(Color.Transparent)
+                        ) {
+                            Row {
+                                Text(
+                                    "Don't have an Account?",
+                                    color = Color(0XFFA4A4A4),
+                                    fontSize = (screenWidth * 0.04f).value.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontFamily = FontFamily.Default
+                                )
+                                Text(
+                                    text = " Sign Up",
+                                    color = Color.LightGray,
+                                    fontSize = (screenWidth * 0.04f).value.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontFamily = FontFamily.Default
+                                )
                             }
-                            .alpha(if (isSignInEnabled) 1f else 0.5f)
-                    )
-
-                    Button(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        onClick = { navController.navigate(DeliverXScreens.SignUpScreen.name) },
-                        colors = ButtonDefaults.buttonColors(Color.Transparent),
-
-                    ) {
-                        Row() {
-                            Text("Don't have an Account?",
-                                color = Color(0XFFA4A4A4),
-                                fontSize = (14.33).sp,
-                                fontWeight = FontWeight.SemiBold,
-                                fontFamily = FontFamily.Default)
-                            Text(text = " Sign Up",
-                                color = Color.LightGray,
-                                fontSize = (14.33).sp,
-                                fontWeight = FontWeight.SemiBold,
-                                fontFamily = FontFamily.Default,)
                         }
+                        Spacer(modifier = Modifier.padding(screenHeight * 0.01f))
+                        // "Or continue with" section
+                        Image(
+                            painter = painterResource(id = R.drawable.or_continue_with),
+                            contentDescription = "Image Button",
+                            modifier = Modifier
+                                .padding(top = 1.dp)
+                                .height(screenHeight * 0.02f)
+                                .fillMaxWidth(0.85f)
+                                .align(Alignment.CenterHorizontally),
+                            contentScale = ContentScale.FillWidth
+                        )
+                        Spacer(modifier = Modifier.padding(screenHeight * 0.007f))
+                        // Social login buttons - match the row from SignUpScreen
+                        Row(
+                            modifier = Modifier
+                                .padding(top = screenHeight * 0.01f)
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.google_login),
+                                contentDescription = "Google Login",
+                                modifier = Modifier
+                                    .height(screenHeight * 0.05f)
+                                    .width(screenWidth * 0.16f)
+                                    .clickable {
+                                        Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT)
+                                            .show()
+                                    },
+                                contentScale = ContentScale.Fit
+                            )
+
+                            Image(
+                                painter = painterResource(id = R.drawable.apple_login),
+                                contentDescription = "Apple Login",
+                                modifier = Modifier
+                                    .padding(start = screenWidth * 0.09f)
+                                    .height(screenHeight * 0.05f)
+                                    .width(screenWidth * 0.16f)
+                                    .clickable {
+                                        Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT)
+                                            .show()
+                                    },
+                                contentScale = ContentScale.Fit
+                            )
+
+                            Image(
+                                painter = painterResource(id = R.drawable.fb_login),
+                                contentDescription = "Facebook Login",
+                                modifier = Modifier
+                                    .padding(start = screenWidth * 0.09f)
+                                    .height(screenHeight * 0.05f)
+                                    .width(screenWidth * 0.16f)
+                                    .clickable {
+                                        Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT)
+                                            .show()
+                                    },
+                                contentScale = ContentScale.Fit
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(screenHeight * 0.05f))
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.or_continue_with),
-                        contentDescription = "Image Button",
-                        modifier = Modifier
-                            .padding(top = 20.dp)
-                            .height(20.dp)
-                            .width(300.dp)
-                            .align(Alignment.CenterHorizontally)
-                    )
-
-                    Row(modifier = Modifier.padding(20.dp)) {
-                        Image(
-                            painter = painterResource(id = R.drawable.google_login),
-                            contentDescription = "Image Button",
-                            modifier = Modifier
-                                .padding(start = 50.dp)
-                                .height(44.dp)
-                                .width(58.dp)
-                                .clickable {
-                                    Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.apple_login),
-                            contentDescription = "Image Button",
-                            modifier = Modifier
-                                .padding(start = 33.dp)
-                                .height(44.dp)
-                                .width(58.dp)
-                                .clickable {
-                                    Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.fb_login),
-                            contentDescription = "Image Button",
-                            modifier = Modifier
-                                .padding(start = 33.dp)
-                                .height(44.dp)
-                                .width(58.dp)
-                                .clickable {
-                                    Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-                        )
-                    }
-
-                    Image(
-                        painter = painterResource(id = R.drawable.book),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .height(160.dp)
-                            .width(185.dp)
-                            .rotate(33.9F)
-                            .graphicsLayer(rotationZ = -33.9f)
-                            .zIndex(5f)
-                            .offset(x = 235.dp, y = 8.dp)
-
-                    )
                 }
             }
         }
@@ -357,8 +465,3 @@ fun LoginScreenPreview() {
     val navController = rememberNavController()
     LoginScreen(navController = navController)
 }
-
-
-
-
-
