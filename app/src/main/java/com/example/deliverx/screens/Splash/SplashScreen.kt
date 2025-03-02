@@ -31,7 +31,7 @@ fun SplashScreen(navController: NavController) {
     LaunchedEffect(progress) {
         if (progress == 1f) {
             navController.navigate(
-                if (isLoggedIn) DeliverXScreens.HomeScreen.name
+                if (isLoggedIn) DeliverXScreens.SearchScreen.name
                 else DeliverXScreens.LoginScreen.name
             ) {
                 popUpTo(0)
