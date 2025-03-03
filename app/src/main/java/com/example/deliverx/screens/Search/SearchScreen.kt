@@ -10,8 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import androidx.wear.compose.material.Text
 
 @Composable
@@ -20,8 +22,17 @@ fun SearchScreen(navController: NavController) {
         Column(modifier = Modifier.fillMaxSize().padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
-            Text("Search Screen", color = MaterialTheme.colorScheme.onPrimary)
+
+
+            Text("Search Screen", color = Color.Black)
         }
     }
+}
+
+@Preview
+@Composable
+fun SearchScreenPreview() {
+    val navController = rememberNavController()
+    SearchScreen(navController = navController)
 }
 
