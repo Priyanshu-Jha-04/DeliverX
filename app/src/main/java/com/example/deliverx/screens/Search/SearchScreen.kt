@@ -20,7 +20,7 @@ fun SearchScreen(navController: NavController) {
     val gradientColors = listOf(
         Color(0xFF4ECDC4),
         Color(0xFF45B7D1),
-        Color(0xFF0077BE)   
+        Color(0xFF0077BE)
     )
 
     val configuration = LocalConfiguration.current
