@@ -292,7 +292,6 @@ fun SearchScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun SearchScreenPreview() {
-    // Preview won't show Places API integration
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
         val navController = rememberNavController()
         SearchScreen(navController = navController)
