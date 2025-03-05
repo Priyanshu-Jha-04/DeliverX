@@ -135,6 +135,10 @@ dependencies {
     implementation ("com.google.android.libraries.places:places:4.1.0")
     implementation ("com.google.android.gms:play-services-maps:19.0.0")
 
+    implementation ("org.slf4j:slf4j-simple:2.0.5")
+    implementation ("com.google.maps:google-maps-services:2.1.2")
+
+
 }
 
 kapt {
