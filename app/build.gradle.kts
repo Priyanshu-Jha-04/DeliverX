@@ -139,6 +139,12 @@ dependencies {
     implementation ("com.google.maps:google-maps-services:2.1.2")
 
 
+    // Google Places
+
+    // Kotlin Coroutines
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+
 }
 
 kapt {
