@@ -137,7 +137,7 @@ dependencies {
 
     implementation ("org.slf4j:slf4j-simple:2.0.5")
     implementation ("com.google.maps:google-maps-services:2.1.2")
-    
+
     // Kotlin Coroutines
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
