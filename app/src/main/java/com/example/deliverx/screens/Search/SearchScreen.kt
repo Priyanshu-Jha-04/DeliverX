@@ -30,8 +30,8 @@ import kotlinx.coroutines.launch
 // Data class to store location details
 data class LocationData(
     val address: String,
-    val placeId: String = "", // Optional: Store Google Place ID for more details if needed
-    val latitude: Double = 0.0, 
+    val placeId: String = "", 
+    val latitude: Double = 0.0,
     val longitude: Double = 0.0
 )
 
