@@ -8,8 +8,8 @@ Deliver X is a smart delivery route optimization app that helps delivery agents 
 
 - 🗺️ **Real-time Google Maps Integration**
 - 🧠 **Shortest Path Finder using Genetic Algorithm**
-- ➕ **Add 4–5 Custom Locations**
-- 🔁 **Optimized Route Visualization**
+- ➕ **Add Upto 10 Custom Locations**
+- 🔁 **Optimized Route Visualization** (Coming Soon)
 - ⚡ **Fast & Lightweight UI using Jetpack Compose**
 - 🧩 **Modular Architecture with MVVM + Clean Architecture**
 - 🔐 **Secure API key management**
