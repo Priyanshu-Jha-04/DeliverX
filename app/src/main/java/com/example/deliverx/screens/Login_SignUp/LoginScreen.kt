@@ -92,7 +92,7 @@ fun LoginScreen(navController: NavController) {
                 if (task.isSuccessful) {
                     Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
                     saveLoginState(context, true)
-                    navController.navigate(DeliverXScreens.HomeScreen.name)
+                    navController.navigate(DeliverXScreens.SearchScreen.name)
                 } else {
                     Toast.makeText(
                         context,
@@ -105,8 +105,7 @@ fun LoginScreen(navController: NavController) {
 
     Surface(
         modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState),
+            .fillMaxSize(),
         color = Color.Black
     ) {
         Box(
