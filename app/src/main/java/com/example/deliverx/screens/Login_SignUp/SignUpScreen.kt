@@ -38,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -66,6 +67,7 @@ import com.example.deliverx.components.GradientTextField
 import com.example.deliverx.navigation.DeliverXScreens
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpScreen(navController: NavController) {
@@ -105,42 +107,58 @@ fun SignUpScreen(navController: NavController) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.value, password.value)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val userId = task.result?.user?.uid ?: ""
+                    val userId = task.result?.user?.uid.orEmpty()
+
+                    if (userId.isBlank()) {
+                        Log.e("SignUp", "User ID is blank")
+                        Toast.makeText(context, "Sign Up Failed: Invalid user ID", Toast.LENGTH_SHORT).show()
+                        isLoading = false
+                        return@addOnCompleteListener
+                    }
+
                     val user = hashMapOf(
                         "firstName" to FName.value.trim(),
                         "lastName" to LName.value.trim(),
                         "email" to email.value.trim(),
                         "mobile" to MobNo.value.trim()
                     )
+
                     FirebaseFirestore.getInstance().collection("users").document(userId)
                         .set(user)
                         .addOnSuccessListener {
+                            Log.d("SignUp", "User successfully written to Firestore.")
                             Toast.makeText(context, "Sign Up Successful", Toast.LENGTH_SHORT).show()
-                            navController.navigate(DeliverXScreens.HomeScreen.name) {
+                            saveLoginState(context, true)
+                            navController.navigate(DeliverXScreens.SearchScreen.name) {
                                 popUpTo("signup") { inclusive = true }
                             }
-                            saveLoginState(context, true)
                         }
-                        .addOnFailureListener {
-                            Toast.makeText(context, "Error saving user data", Toast.LENGTH_SHORT)
-                                .show()
+                        .addOnFailureListener { e ->
+                            Log.e("FirestoreError", "Failed to write user data", e)
+                            Toast.makeText(context, "Firestore Error: ${e.message}", Toast.LENGTH_SHORT).show()
                         }
+                        .addOnCompleteListener {
+                            Log.d("SignUp", "Firestore write completed")
+                            isLoading = false
+                        }
+
+
                 } else {
-                    Log.d("Failure", "${task.exception}")
+                    Log.e("SignUp", "Auth failed", task.exception)
                     Toast.makeText(
                         context,
                         "Sign Up Failed: ${task.exception?.message}",
                         Toast.LENGTH_SHORT
                     ).show()
+                    isLoading = false
                 }
-                isLoading = false
             }
     }
 
+
     Surface(
         modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState),
+            .fillMaxSize(),
         color = Color.Black
     ) {
         Box(
@@ -417,33 +435,45 @@ fun SignUpScreen(navController: NavController) {
 
                         Spacer(modifier = Modifier.padding(screenHeight * 0.01f))
 
-                        Image(
-                            painter = painterResource(id = R.drawable.signup_button),
-                            contentDescription = "Image Button",
-                            modifier = Modifier
-                                .height(screenHeight * 0.055f)
-                                .fillMaxWidth(0.85f)
-                                .align(Alignment.CenterHorizontally)
-                                .clickable(enabled = isSignInEnabled) {
-                                    if (!isSignInEnabled) {
-                                        Toast.makeText(
-                                            context,
-                                            "Fill up all the details!",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    } else if (isSignInEnabled && password.value.length < 8) {
-                                        Toast.makeText(
-                                            context,
-                                            "Password must of at least 8 characters!",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    } else if (isSignInEnabled) {
-                                        signUp()
+                        val coroutineScope = rememberCoroutineScope()
+
+                        Button(
+                            onClick = {
+                                if (!isSignInEnabled) {
+                                    Toast.makeText(
+                                        context,
+                                        "Fill up all the details!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                } else if (password.value.length < 8) {
+                                    Toast.makeText(
+                                        context,
+                                        "Password must be at least 8 characters!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                } else {
+                                    coroutineScope.launch {
+                                        navController.navigate(DeliverXScreens.SearchScreen.name) {
+                                            popUpTo("signup") { inclusive = true }
+                                        }
                                     }
                                 }
-                                .alpha(if (isSignInEnabled) 1f else 0.5f),
-                            contentScale = ContentScale.FillWidth
-                        )
+                            },
+                            enabled = isSignInEnabled,
+                            modifier = Modifier.alpha(if (isSignInEnabled) 1f else 0.5f)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.signup_button),
+                                contentDescription = "Sign Up",
+                                modifier = Modifier
+                                    .height(screenHeight * 0.055f)
+                                    .fillMaxWidth(0.85f),
+                                contentScale = ContentScale.FillWidth
+                            )
+                        }
+
+
+
 
                         Button(
                             modifier = Modifier.align(Alignment.CenterHorizontally),
