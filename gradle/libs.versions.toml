@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.2"
+agp = "8.9.1"
 androidMapsUtils = "3.5.3"
 animatedNavigationBar = "1.0.0"
 coilCompose = "3.0.4"
