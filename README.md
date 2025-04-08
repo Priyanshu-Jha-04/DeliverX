@@ -47,8 +47,8 @@ Deliver X uses a Genetic Algorithm (GA) to solve the **Traveling Salesman Proble
 ## 🖼️ UI Overview (Screens)
 
 - **Splash Screen** – App logo & animation
-- **Home Screen** – Current location + destination input
-- **Map Screen** – Real-time map with optimized route
+- **Login and SignUp Screen** – Login or SignUp with a new account
+- **Search Screen** – Fill up the locations
 - **Route Summary** – Distance, estimated time, stops
 
 ---
