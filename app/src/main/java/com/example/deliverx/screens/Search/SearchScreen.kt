@@ -90,7 +90,8 @@ fun SearchScreen(navController: NavController) {
     // State for location inputs and suggestions
     val locationInputs = remember { mutableStateListOf<String>() }
     val selectedLocations = remember { mutableStateListOf<LocationData>() }
-    val locationSuggestions = remember { mutableStateMapOf<Int, List<Pair<String, String>>>() } // Pair of display text and place ID
+    val locationSuggestions =
+        remember { mutableStateMapOf<Int, List<Pair<String, String>>>() } // Pair of display text and place ID
     val showSuggestions = remember { mutableStateMapOf<Int, Boolean>() }
 
     // State for route calculation and dialog
@@ -426,7 +427,12 @@ fun SearchScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        "Total Distance: ${String.format("%.2f", routeResult!!.totalDistance / 1000)} km",
+                        "Total Distance: ${
+                            String.format(
+                                "%.2f",
+                                routeResult!!.totalDistance / 1000
+                            )
+                        } km",
                         color = Color.White
                     )
 
@@ -494,8 +500,10 @@ fun SearchScreen(navController: NavController) {
         }
     }
 
-    Surface(modifier = Modifier.fillMaxSize(),
-        color = Color(0xFFFB9AD1)) {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color(0xFFFB9AD1)
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -591,7 +599,8 @@ fun SearchScreen(navController: NavController) {
                             onValueChange = { newValue ->
                                 if (index < locationInputs.size) {
                                     locationInputs[index] = newValue
-                                    selectedLocations[index] = LocationData(newValue) // Update with basic address
+                                    selectedLocations[index] =
+                                        LocationData(newValue) // Update with basic address
                                     fetchLocationSuggestions(newValue, index)
                                 }
                             },
@@ -627,7 +636,9 @@ fun SearchScreen(navController: NavController) {
                                 LazyColumn(
                                     modifier = Modifier.heightIn(max = 200.dp)
                                 ) {
-                                    items(locationSuggestions[index] ?: emptyList()) { (suggestion, placeId) ->
+                                    items(
+                                        locationSuggestions[index] ?: emptyList()
+                                    ) { (suggestion, placeId) ->
                                         Text(
                                             text = suggestion,
                                             color = Color.White,
@@ -636,7 +647,8 @@ fun SearchScreen(navController: NavController) {
                                                 .clickable {
                                                     locationInputs[index] = suggestion
                                                     // Store the selected location with its place ID
-                                                    selectedLocations[index] = LocationData(suggestion, placeId)
+                                                    selectedLocations[index] =
+                                                        LocationData(suggestion, placeId)
                                                     showSuggestions[index] = false
 
                                                     // Move focus to next field or hide keyboard if it's the last field
