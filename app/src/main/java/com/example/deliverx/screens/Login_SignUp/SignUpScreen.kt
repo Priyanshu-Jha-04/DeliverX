@@ -111,7 +111,11 @@ fun SignUpScreen(navController: NavController) {
 
                     if (userId.isBlank()) {
                         Log.e("SignUp", "User ID is blank")
-                        Toast.makeText(context, "Sign Up Failed: Invalid user ID", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Sign Up Failed: Invalid user ID",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         isLoading = false
                         return@addOnCompleteListener
                     }
@@ -135,7 +139,11 @@ fun SignUpScreen(navController: NavController) {
                         }
                         .addOnFailureListener { e ->
                             Log.e("FirestoreError", "Failed to write user data", e)
-                            Toast.makeText(context, "Firestore Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Firestore Error: ${e.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                         .addOnCompleteListener {
                             Log.d("SignUp", "Firestore write completed")
