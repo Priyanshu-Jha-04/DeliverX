@@ -2,15 +2,11 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
+    id("com.google.devtools.ksp")
 
     // Google services Gradle plugin
     id("com.google.gms.google-services")
-
-    //Dagger-Hilt
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
-    //alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -25,7 +21,6 @@ android {
         versionName = "1.0"
         manifestPlaceholders["MAPS_API_KEY"] = project.findProperty("MAPS_API_KEY") ?: ""
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -51,7 +46,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -67,6 +61,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.annotation)
     implementation(libs.places)
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -75,77 +70,63 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Firebase BoM
+    // Firebase
     implementation(platform(libs.firebase.bom))
-
-    // Firebase Authentication and Cloud Fire-store
-
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
-    implementation(platform(libs.firebase.bom))
 
-    // Dagger-Hilt
+    // Hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation)
+
+    // For instrumentation tests
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.59.2")
+    kspAndroidTest(libs.hilt.android.compiler)
+
+    // For local unit tests
+    testImplementation("com.google.dagger:hilt-android-testing:2.59.2")
+    kspTest(libs.hilt.android.compiler)
+
+
+    // Compose / Lifecycle
     implementation(libs.androidx.runtime)
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.runtime.rxjava2)
-    implementation(libs.androidx.hilt.navigation)
-
-    // Coroutines
-    implementation(libs.kotlinx.coroutines.android.v173)
-    implementation(libs.kotlinx.coroutines.core.v173)
-    implementation (libs.kotlinx.coroutines.play.services.v173)
-
-    // ViewModel and LiveData
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
-    // Coil for loading Images
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.play.services)
+
+    // Coil & Lottie
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
-
-    // Lottie Animation
-    implementation (libs.lottie)
+    implementation(libs.lottie)
     implementation(libs.lottie.compose)
 
-    // For Material Icons
+    // Icons
     implementation(libs.androidx.material.icons.extended)
 
-    // Wear
+    // Wear / Maps
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.compose.ui.tooling)
-
-    // Google Maps Dependency
     implementation(libs.maps.compose)
-    implementation (libs.play.services.location)
-    implementation(libs.androidx.navigation.compose)
-    implementation (libs.android.maps.utils)
+    implementation(libs.play.services.location)
+    implementation(libs.android.maps.utils)
 
-    // Animated Navigation Bar
+    // Navigation
     implementation(libs.animated.navigation.bar)
     implementation(libs.androidx.navigation.compose.v276)
 
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
-    implementation ("com.google.android.libraries.places:places:4.1.0")
-    implementation ("com.google.android.gms:play-services-maps:19.0.0")
-
-    implementation ("org.slf4j:slf4j-simple:2.0.5")
-    implementation ("com.google.maps:google-maps-services:2.1.2")
-
-    // Kotlin Coroutines
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-
-
+    // Misc
+    implementation("org.slf4j:slf4j-simple:2.0.5")
+    implementation("com.google.maps:google-maps-services:2.1.2")
 }
-
-kapt {
-    correctErrorTypes = true
-}
-
 
