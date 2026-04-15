@@ -131,7 +131,7 @@ dependencies {
     implementation(libs.animated.navigation.bar)
     implementation(libs.androidx.navigation.compose.v276)
 
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
     implementation ("com.google.android.libraries.places:places:4.1.0")
     implementation ("com.google.android.gms:play-services-maps:19.0.0")
 

@@ -1,6 +1,6 @@
 package com.example.deliverx.navigation
 
-enum class DeliverXScreens {
+enum class  DeliverXScreens {
     SplashScreen,
     LoginScreen,
     SignUpScreen,

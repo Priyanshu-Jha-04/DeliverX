@@ -11,7 +11,7 @@ class DeliverXApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, "AIzaSyBi4VjsuB3u1DioUj66Z98oX2Seh_2ukpg")
+            Places.initialize(applicationContext, "AIzaSyBtVQEq_10-a7mWd4oaXgKFk1TRhqZcGY8")
         }
         FirebaseApp.initializeApp(this)
     }
