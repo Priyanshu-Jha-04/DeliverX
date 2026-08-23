@@ -2,7 +2,6 @@ package com.example.deliverx
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -10,23 +9,17 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.deliverx.navigation.DeliverXNavigation
 import com.example.deliverx.ui.theme.DeliverXTheme
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.deliverx.ui.theme.LocalThemeState
+import com.example.deliverx.ui.theme.ThemeState
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -35,9 +28,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            DeliverXTheme {
-                DeliverXApp()
-
+            val themeState = remember { ThemeState(this@MainActivity) }
+            CompositionLocalProvider(LocalThemeState provides themeState) {
+                DeliverXTheme {
+                    DeliverXApp()
+                }
             }
         }
     }
@@ -47,8 +42,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DeliverXApp() {
     Surface(modifier = Modifier.fillMaxSize()) {
-        Column(verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             DeliverXNavigation()
         }
     }

@@ -11,6 +11,7 @@ import com.example.deliverx.DeliverXApplication
 import com.example.deliverx.screens.Home.HomeScreen
 import com.example.deliverx.screens.Login_SignUp.LoginScreen
 import com.example.deliverx.screens.Login_SignUp.SignUpScreen
+import com.example.deliverx.screens.Main.MainScreen
 import com.example.deliverx.screens.Nav.NavScreen
 import com.example.deliverx.screens.Profile.ProfileScreen
 import com.example.deliverx.screens.Search.SearchScreen
@@ -33,6 +34,9 @@ fun DeliverXNavigation()  {
         }
         composable(DeliverXScreens.SignUpScreen.name) {
             SignUpScreen(navController = navController)
+        }
+        composable(DeliverXScreens.MainScreen.name) {
+            MainScreen(navController = navController)
         }
         composable(DeliverXScreens.HomeScreen.name) {
             HomeScreen(navController = navController)

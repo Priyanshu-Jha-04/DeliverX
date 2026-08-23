@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.example.deliverx"
-    compileSdk = 35
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.deliverx"
         minSdk = 30
-        targetSdk = 35
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
         manifestPlaceholders["MAPS_API_KEY"] = project.findProperty("MAPS_API_KEY") ?: ""
@@ -112,21 +112,21 @@ dependencies {
     // Icons
     implementation(libs.androidx.material.icons.extended)
 
-    // Wear / Maps
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.material)
-    implementation(libs.androidx.compose.navigation)
-    implementation(libs.androidx.compose.ui.tooling)
+    // Maps
     implementation(libs.maps.compose)
     implementation(libs.play.services.location)
     implementation(libs.android.maps.utils)
 
     // Navigation
     implementation(libs.animated.navigation.bar)
-    implementation(libs.androidx.navigation.compose.v276)
+    implementation(libs.androidx.navigation.compose)
 
     // Misc
     implementation("org.slf4j:slf4j-simple:2.0.5")
     implementation("com.google.maps:google-maps-services:2.1.2")
+
+    // Glassmorphism / background blur
+    implementation(libs.haze)
+    implementation(libs.haze.materials)
 }
 

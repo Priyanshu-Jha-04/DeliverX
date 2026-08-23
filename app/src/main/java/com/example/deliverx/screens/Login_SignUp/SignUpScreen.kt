@@ -133,8 +133,8 @@ fun SignUpScreen(navController: NavController) {
                             Log.d("SignUp", "User successfully written to Firestore.")
                             Toast.makeText(context, "Sign Up Successful", Toast.LENGTH_SHORT).show()
                             saveLoginState(context, true)
-                            navController.navigate(DeliverXScreens.SearchScreen.name) {
-                                popUpTo("signup") { inclusive = true }
+                            navController.navigate(DeliverXScreens.MainScreen.name) {
+                                popUpTo(0) { inclusive = true }
                             }
                         }
                         .addOnFailureListener { e ->
@@ -461,8 +461,8 @@ fun SignUpScreen(navController: NavController) {
                                     ).show()
                                 } else {
                                     coroutineScope.launch {
-                                        navController.navigate(DeliverXScreens.SearchScreen.name) {
-                                            popUpTo("signup") { inclusive = true }
+                                        navController.navigate(DeliverXScreens.MainScreen.name) {
+                                            popUpTo(0) { inclusive = true }
                                         }
                                     }
                                 }

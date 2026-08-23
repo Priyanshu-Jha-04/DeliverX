@@ -92,7 +92,9 @@ fun LoginScreen(navController: NavController) {
                 if (task.isSuccessful) {
                     Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
                     saveLoginState(context, true)
-                    navController.navigate(DeliverXScreens.SearchScreen.name)
+                    navController.navigate(DeliverXScreens.MainScreen.name) {
+                        popUpTo(0) { inclusive = true }
+                    }
                 } else {
                     Toast.makeText(
                         context,
