@@ -152,6 +152,9 @@ fun MainScreen(navController: NavController) {
                     horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    val selectedItemWeight = 0.40f
+                    val unselectedItemWeight = (1f - selectedItemWeight) / (navItems.size - 1)
+
                     navItems.forEachIndexed { index, item ->
                         val isSelected = selectedTab == index
                         val accent = item.getAccentColor()
@@ -164,6 +167,15 @@ fun MainScreen(navController: NavController) {
                             label = "nav_scale"
                         )
 
+                        val animatedWeight by animateFloatAsState(
+                            targetValue = if (isSelected) selectedItemWeight else unselectedItemWeight,
+                            animationSpec = spring(
+                                dampingRatio = Spring.DampingRatioLowBouncy,
+                                stiffness = Spring.StiffnessLow
+                            ),
+                            label = "nav_item_weight"
+                        )
+
                         val contentColor by animateColorAsState(
                             targetValue = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                             animationSpec = tween(200),
@@ -172,7 +184,7 @@ fun MainScreen(navController: NavController) {
 
                         Box(
                             modifier = Modifier
-                                .weight(1f)
+                                .weight(animatedWeight)
                                 .fillMaxHeight()
                                 .clip(RoundedCornerShape(cornerRadius * 0.7f))
                                 .clickable(
